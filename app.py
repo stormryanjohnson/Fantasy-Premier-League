@@ -50,6 +50,7 @@ def predict_api():
         data_df[key] = [data_dict[key]]
     data_df = data_df.fillna(0)
     prediction = model.predict(data_df)[0]/10
+    print(4)
     return jsonify(prediction)
 
 
