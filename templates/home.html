@@ -131,22 +131,25 @@
                 input.classList.add('default-value');
             }
         }
-
+    
         const form = document.getElementById("prediction-form");
         const resultDiv = document.getElementById("prediction-result");
-
+        
+        // Define the dynamic API endpoint here
+        const apiEndpoint = process.env.API_ENDPOINT; //"http://127.0.0.1:5000/predict" || process.env.API_ENDPOINT || "http://0.0.0.0:8000/predict" || 
+    
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             const formData = new FormData(form);
-
+    
             // Convert form data to JSON
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
-
+    
             // Send a POST request to the API endpoint
-            fetch("http://127.0.0.1:5000/predict", {
+            fetch(apiEndpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

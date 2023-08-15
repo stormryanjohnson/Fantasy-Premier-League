@@ -24,7 +24,7 @@ columns = ['minutes', 'goals_scored', 'assists', 'previous_start_value', 'delta_
 app = Flask(__name__)
 
 ## Load the model
-model = pickle.load(open(f'{BASE_DIR}/models/catboost_{__version__}.pkl','rb'))
+model = pickle.load(open(f'{BASE_DIR}/models/ridge_{__version__}.pkl','rb'))
 
 @app.route('/')
 def home():
@@ -32,7 +32,7 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict_api():
-    print(request.json)
+    #print(request.json)
     data_dict = request.json
     #data = np.array(list(data.values())).reshape(1,-1)
     teams_key = f'teams_{data_dict["team"]}'
@@ -49,8 +49,7 @@ def predict_api():
     for key in data_dict:
         data_df[key] = [data_dict[key]]
     data_df = data_df.fillna(0)
-    prediction = model.predict(data_df)[0]/10
-    print(4)
+    prediction = round(model.predict(data_df)[0]/10, 2)
     return jsonify(prediction)
 
 
