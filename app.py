@@ -48,7 +48,7 @@ def predict_api():
     data_df = pd.DataFrame(columns=columns)
     for key in data_dict:
         data_df[key] = [data_dict[key]]
-    
+    print(5)
     data_df = data_df.fillna(0)
     prediction = model.predict(data_df)[0]/10
     return jsonify(prediction)
