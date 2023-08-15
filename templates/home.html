@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fantasy Premier League - Player Price Predictor</title>
+    <style>
+        /* Add CSS styles to align input boxes and button */
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .input-container label {
+            flex: 1;
+            width: 150px; /* Adjust the width as needed */
+            margin-right: 10px;
+        }
+
+        .input-container input,
+        .input-container select {
+            flex: 2;
+            width: 100%; /* Expand input/select to fill available space */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        
+        /* Add CSS styles for transparent default values */
+        .default-value {
+            color: #999; /* Light gray color for transparency */
+        }
+    </style>
+</head>
+<body>
+    <h1>Fantasy Premier League - Player Price Predictor</h1>
+    <h3>Enter player's data from the previous season:</h3>
+    <form id="prediction-form">
+        <div class="input-container">
+            <label for="position">Position:</label>
+            <select id="position" name="position" required>
+                <option value="GK">Goalkeeper</option>
+                <option value="DEF">Defender</option>
+                <option value="MID">Midfielder</option>
+                <option value="FWD">Forward</option>
+            </select>
+        </div>
+
+        <div class="input-container">
+            <label for="team">Team:</label>
+            <select id="team" name="team" required>
+                <option value="arsenal">Arsenal</option>
+                <option value="astonvilla">Aston Villa</option>
+                <option value="Bournemouth">Bournemouth</option>
+                <option value="brentford">Brentford</option>
+                <option value="brighton&hovealbion">Brighton</option>
+                <option value="burnley">Burnley</option>
+                <option value="cardiffcity">Cardiff City</option>
+                <option value="chelsea">Chelsea</option>
+                <option value="crystalpalace">Crystal Palace</option>
+                <option value="everton">Everton</option>
+                <option value="Ffulham">Fulham</option>
+                <option value="huddersfieldtown">Huddersfield Town</option>
+                <option value="leedsunited">Leeds United</option>
+                <option value="leicestercity">Leicester City</option>
+                <option value="liverpool">Liverpool</option>
+                <option value="manchestercity">Manchester City</option>
+                <option value="manchesterunited">Manchester United</option>
+                <option value="newcastleunited">Newcastle United</option>
+                <option value="norwichcity">Norwich City</option>
+                <option value="nottinghamforest">Nottingham Forest</option>
+                <option value="sheffieldunited">Sheffield United</option>
+                <option value="southampton">Southampton</option>
+                <option value="stokecity">Stoke City</option>
+                <option value="swanseacity">Swansea City</option>
+                <option value="tottenhamhotspur">Tottenham Hotspur</option>
+                <option value="watford">Watford</option>
+                <option value="westbromwichalbion">West Bromwich Albion</option>
+                <option value="westhamunited">West Ham United</option>
+                <option value="wolverhamptonwanderers">Wolverhampton Wanderers</option>
+                <!-- Add more team options here -->
+            </select>
+        </div>
+        <div class="input-container">
+            <label for="goals_scored">Goals:</label>
+            <input type="text" id="goals_scored" name="goals_scored" required value="e.g. 10" onfocus="clearDefault(this)" onblur="restoreDefault(this)">
+        </div>
+
+        <div class="input-container">
+            <label for="assists">Assists:</label>
+            <input type="text" id="assists" name="assists" required value="e.g. 5" onfocus="clearDefault(this)" onblur="restoreDefault(this)">
+        </div>
+        <div class="input-container">
+            <label for="minutes">Total minutes played:</label>
+            <input type="text" id="minutes" name="minutes" required value="e.g. 1500" onfocus="clearDefault(this)" onblur="restoreDefault(this)">
+        </div>
+
+        <div class="input-container">
+            <label for="previous_start_value">Starting price:</label>
+            <input type="text" id="previous_start_value" name="previous_start_value" required value="e.g. 10.0" onfocus="clearDefault(this)" onblur="restoreDefault(this)">
+        </div>
+
+        <div class="input-container">
+            <label for="previous_end_value">Ending price:</label>
+            <input type="text" id="previous_end_value" name="previous_end_value" required value="e.g. 12.5" onfocus="clearDefault(this)" onblur="restoreDefault(this)">
+        </div>
+
+        <div class="button-container">
+            <input type="submit" value="Get Prediction">
+        </div>
+    </form>
+
+    <div id="prediction-result">
+        <!-- The model's prediction result will be displayed here -->
+    </div>
+
+    <!-- Add any additional JavaScript code here if needed -->
+    <script>
+        function clearDefault(input) {
+            if (input.value === input.defaultValue) {
+                input.value = '';
+                input.classList.remove('default-value');
+            }
+        }
+        
+        function restoreDefault(input) {
+            if (input.value === '') {
+                input.value = input.defaultValue;
+                input.classList.add('default-value');
+            }
+        }
+
+        const form = document.getElementById("prediction-form");
+        const resultDiv = document.getElementById("prediction-result");
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            // Convert form data to JSON
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Send a POST request to the API endpoint
+            fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Display the prediction result in the resultDiv
+                resultDiv.innerHTML = `<p>This player's price is predicted to be: £${JSON.stringify(result)}</p>`;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                resultDiv.innerHTML = "<p>An error occurred while getting the prediction. Please ensure all data entries are correct.</p>";
+            });
+        });
+    </script>
+</body>
+</html>
