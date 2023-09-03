@@ -45,7 +45,7 @@ def predict_api():
     print(data_df.columns)
     
     # perform prediction and round to nearest 5 (consistent with real-world FPL pricing)
-    prediction = round_to_nearest_5(model.predict(data_df)[0])/10
+    prediction = round(model.predict(data_df)[0]/10)  #round_to_nearest_5(model.predict(data_df)[0])/10
     
     return jsonify(prediction)
 
