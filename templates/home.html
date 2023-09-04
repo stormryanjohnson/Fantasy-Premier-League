@@ -75,11 +75,19 @@
             .default-value {
                 color: #999; /* Light gray color for transparency */
             }
+
+            /* Style the hyperlink color to white */
+            a {
+                color: #fff;
+                text-decoration: none; /* Remove underline if needed */
+            }
+
         </style>
     </head>
     <body>
         <header>
-            <h1>Storm Ryan Johnson's FPL Player Price Predictor</h1>
+            <h1>Fantasy Premier League - Player Price Predictor</h1>
+            <h3>Developed by <a href="https://neat-second-89c.notion.site/Storm-Ryan-Johnson-98b206ead257412980b738ac20faef7c?pvs=4">Storm Ryan Johnson</a></h3>
         </header>
         <div class="container">
             <h3>Enter player's data from the previous season:</h3>
@@ -172,7 +180,7 @@
         <!-- The model's prediction result will be displayed here -->
     </div>
 
-    <!-- Add any additional JavaScript code here if needed -->
+    <!-- JavaScript -->
     <script>
         function clearDefault(input) {
             if (input.value === input.defaultValue) {
